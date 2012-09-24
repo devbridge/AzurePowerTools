@@ -1,11 +1,10 @@
-# Build and Object Folders
-bin/
-obj/
-
-#User Specific Files
-*.user
-*.suo
-
-#Resource Caches
+obj
+bin
+deploy
+deploy/*
 _ReSharper.*
-*.sln.cache
+*.resharper
+*.suo
+*.cache
+~$*
+*.user

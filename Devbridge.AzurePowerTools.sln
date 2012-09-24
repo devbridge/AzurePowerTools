@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devbridge.BasicAuthentication", "Devbridge.BasicAuthentication\Devbridge.BasicAuthentication.csproj", "{8B8D3FF3-9E4B-48D9-8BEF-52AB2651638A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devbridge.BasicAuthentication.Test", "Devbridge.BasicAuthentication.Test\Devbridge.BasicAuthentication.Test.csproj", "{11EBC198-765A-4017-9091-CCD5D934015A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{743822B6-591F-46ED-88C6-BC4B236DEFE5}"
+	ProjectSection(SolutionItems) = preProject
+		SharedAssemblyInfo.cs = SharedAssemblyInfo.cs
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8B8D3FF3-9E4B-48D9-8BEF-52AB2651638A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B8D3FF3-9E4B-48D9-8BEF-52AB2651638A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B8D3FF3-9E4B-48D9-8BEF-52AB2651638A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B8D3FF3-9E4B-48D9-8BEF-52AB2651638A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11EBC198-765A-4017-9091-CCD5D934015A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11EBC198-765A-4017-9091-CCD5D934015A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11EBC198-765A-4017-9091-CCD5D934015A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11EBC198-765A-4017-9091-CCD5D934015A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
