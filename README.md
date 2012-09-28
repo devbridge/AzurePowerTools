@@ -5,7 +5,7 @@ Our Azure Power Tools project is the collection of Windows Azure related tools a
 You can also take a look at our [Standard Web Project Template](https://github.com/devbridge/StandardWebProjectTemplate).
 
 ## Basic authentication for Windows Azure websites
-Basic authentication for Windows Azure websites is a HTTP managed module that provides basic authentication for web applications hosted in Windows Azure websites. For more information please read this [blog post](http://www.devbridge.com/articles/).
+Basic authentication for Windows Azure websites is a HTTP managed module that provides basic authentication for web applications hosted in Windows Azure websites. For more information please read this [blog post](http://www.devbridge.com/articles/basic-authentication-for-windows-azure-websites).
 
 Basic authentication module has relation to two projects:
 - Devbridge.BasicAuthentication project has the implementation for the basic authentication module.
