@@ -10,20 +10,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{743822
 		SharedAssemblyInfo.cs = SharedAssemblyInfo.cs
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PowerShell", "PowerShell", "{B7FDCCA1-5E95-4F04-8515-FD9BB2DEDA98}"
+	ProjectSection(SolutionItems) = preProject
+		PowerShell\PublishCloudService.ps1 = PowerShell\PublishCloudService.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8B8D3FF3-9E4B-48D9-8BEF-52AB2651638A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8B8D3FF3-9E4B-48D9-8BEF-52AB2651638A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8B8D3FF3-9E4B-48D9-8BEF-52AB2651638A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8B8D3FF3-9E4B-48D9-8BEF-52AB2651638A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{11EBC198-765A-4017-9091-CCD5D934015A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{11EBC198-765A-4017-9091-CCD5D934015A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11EBC198-765A-4017-9091-CCD5D934015A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11EBC198-765A-4017-9091-CCD5D934015A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B8D3FF3-9E4B-48D9-8BEF-52AB2651638A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B8D3FF3-9E4B-48D9-8BEF-52AB2651638A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B8D3FF3-9E4B-48D9-8BEF-52AB2651638A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B8D3FF3-9E4B-48D9-8BEF-52AB2651638A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
