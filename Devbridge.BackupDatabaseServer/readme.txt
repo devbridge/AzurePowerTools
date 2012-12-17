@@ -1,0 +1,2 @@
+﻿This project exports all database in sql azure server to some folder (produces bacpac) files. It relies on DACFramework (http://www.microsoft.com/en-us/download/details.aspx?id=35756) which must be installed in order to use this tool.
+We need to improve backup process by first making database copies then exporting them - because exports are not transactionally consistent.

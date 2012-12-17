@@ -15,20 +15,26 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PowerShell", "PowerShell", 
 		PowerShell\PublishCloudService.ps1 = PowerShell\PublishCloudService.ps1
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devbridge.BackupDatabaseServer", "Devbridge.BackupDatabaseServer\Devbridge.BackupDatabaseServer.csproj", "{E27C9B4E-C2D9-41AD-AF13-2E02A82560FD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{11EBC198-765A-4017-9091-CCD5D934015A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{11EBC198-765A-4017-9091-CCD5D934015A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{11EBC198-765A-4017-9091-CCD5D934015A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{11EBC198-765A-4017-9091-CCD5D934015A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8B8D3FF3-9E4B-48D9-8BEF-52AB2651638A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8B8D3FF3-9E4B-48D9-8BEF-52AB2651638A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B8D3FF3-9E4B-48D9-8BEF-52AB2651638A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B8D3FF3-9E4B-48D9-8BEF-52AB2651638A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11EBC198-765A-4017-9091-CCD5D934015A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11EBC198-765A-4017-9091-CCD5D934015A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11EBC198-765A-4017-9091-CCD5D934015A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11EBC198-765A-4017-9091-CCD5D934015A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E27C9B4E-C2D9-41AD-AF13-2E02A82560FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E27C9B4E-C2D9-41AD-AF13-2E02A82560FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E27C9B4E-C2D9-41AD-AF13-2E02A82560FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E27C9B4E-C2D9-41AD-AF13-2E02A82560FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
