@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="BackupsDir" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Backups</Value>
+      <Value Profile="(Default)">DatabaseBackups</Value>
     </Setting>
     <Setting Name="BackupFilesToKeep" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">14</Value>
@@ -11,12 +11,30 @@
     <Setting Name="FileNameFormat" Type="System.String" Scope="Application">
       <Value Profile="(Default)">{0}_{1:yyyy-MM-dd_hh-mm-ss-fff}</Value>
     </Setting>
+    <Setting Name="BackupedDatabases" Type="System.Collections.Specialized.StringCollection" Scope="Application">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;TestBackup&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="BlobDBUserName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Webtype</Value>
+    </Setting>
+    <Setting Name="BlobDBServerName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">tcp:sdasadasfg.database.windows.net</Value>
+    </Setting>
+    <Setting Name="BlogDBUserPsw" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">[Password]</Value>
+    </Setting>
+    <Setting Name="BlobConnectionString" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DefaultEndpointsProtocol=https;AccountName=webtype;AccountKey=[ACCOUNTKEY]</Value>
+    </Setting>
     <Setting Name="ConnectionString" Type="(Connection string)" Scope="Application">
       <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;ConnectionString&gt;Data Source=tcp:nrvqyfofq4.database.windows.net,1433;Integrated Security=False;User ID=sqlstaging;Password=yEb4BjjEMRCelxDzpHnf;Connect Timeout=15;Encrypt=False;TrustServerCertificate=False&lt;/ConnectionString&gt;
+  &lt;ConnectionString&gt;Data Source=tcp:asdasdasd.database.windows.net,1433;Integrated Security=False;User ID=[UserId];Password=[Password];Connect Timeout=15;Encrypt=False;TrustServerCertificate=False&lt;/ConnectionString&gt;
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
-      <Value Profile="(Default)">Data Source=tcp:nrvqyfofq4.database.windows.net,1433;Integrated Security=False;User ID=sqlstaging;Password=yEb4BjjEMRCelxDzpHnf;Connect Timeout=15;Encrypt=False;TrustServerCertificate=False</Value>
+      <Value Profile="(Default)">Data Source=tcp:asdasdasd.database.windows.net,1433;Integrated Security=False;User ID=[UserId];Password=[Password];Connect Timeout=15;Encrypt=False;TrustServerCertificate=False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -1,0 +1,40 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Devbridge.BackupDatabaseAzureStorage.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="DACWebServiceUrl" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://ch1prod-dacsvc.azure.com/DACWebService.svc</Value>
+    </Setting>
+    <Setting Name="DatabaseUserName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Webtype</Value>
+    </Setting>
+    <Setting Name="ExportFileNameFormat" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://{2}.blob.core.windows.net/{3}/{0}/{0}-{1:yyyy-MM-dd-hh-mm-ss-fff}.bacpac</Value>
+    </Setting>
+    <Setting Name="StorageName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">webtype</Value>
+    </Setting>
+    <Setting Name="BackupsContainer" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">databasebackups</Value>
+    </Setting>
+    <Setting Name="BackupFilesToKeep" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">3</Value>
+    </Setting>
+    <Setting Name="StorageAccessKey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">[StorageAccessKey]</Value>
+    </Setting>
+    <Setting Name="DatabaseUserPassword" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">[Password]</Value>
+    </Setting>
+    <Setting Name="BackupedDatabases" Type="System.Collections.Specialized.StringCollection" Scope="Application">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;WebtypeLogs&lt;/string&gt;
+  &lt;string&gt;Webtype&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="DatabaseServerName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">asadasdv.database.windows.net</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

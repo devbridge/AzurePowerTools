@@ -28,7 +28,7 @@ namespace Devbridge.BackupDatabaseServer
         public void Export(string databaseName, string targetFilename)
         {
             DacServices dacServices = new DacServices(connectionString);
-
+            
             dacServices.ExportBacpac(targetFilename, databaseName);
         }
 
@@ -50,27 +50,7 @@ namespace Devbridge.BackupDatabaseServer
 
                 allDatabases = allDatabases.Where(db => db == "TestBackup").ToList();
 
-                foreach (var dbName in allDatabases)
-                {
-                    string backupDir = Path.Combine(Settings.Default.BackupsDir, dbName);
-                    if (!Directory.Exists(backupDir))
-                    {
-                        Directory.CreateDirectory(backupDir);
-                    }
-
-                    string fileName = Path.Combine(backupDir, string.Format(Settings.Default.FileNameFormat, dbName, DateTime.Now) + "." + BackupFileExtension);
-
-                    logger.InfoFormat("Export of database '{0}' started", dbName);
-                    try
-                    {
-                        Export(dbName, fileName);
-                        logger.InfoFormat("Export of database '{0}' finished succesfully", dbName);
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.ErrorFormat("Error occured while exporting database '{0}'", ex, dbName);
-                    }
-                }
+                ExportDatabases(allDatabases);
 
                 logger.Info("ExportAllDatabases finished");
             }
@@ -78,6 +58,31 @@ namespace Devbridge.BackupDatabaseServer
             {
                 logger.Error("Error occured in ExportAllDatabases", ex);
                 throw ex;
+            }
+        }
+
+        public void ExportDatabases(IList<string> allDatabases)
+        {
+            foreach (var dbName in allDatabases)
+            {
+                string backupDir = Path.Combine(Settings.Default.BackupsDir, dbName);
+                if (!Directory.Exists(backupDir))
+                {
+                    Directory.CreateDirectory(backupDir);
+                }
+
+                string fileName = Path.Combine(backupDir, string.Format(Settings.Default.FileNameFormat, dbName, DateTime.Now) + "." + BackupFileExtension);
+
+                logger.InfoFormat("Export of database '{0}' started", dbName);
+                try
+                {
+                    Export(dbName, fileName);
+                    logger.InfoFormat("Export of database '{0}' finished succesfully", dbName);
+                }
+                catch (Exception ex)
+                {
+                    logger.ErrorFormat("Error occured while exporting database '{0}'", ex, dbName);
+                }
             }
         }
 

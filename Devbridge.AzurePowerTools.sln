@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PowerShell", "PowerShell", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devbridge.BackupDatabaseServer", "Devbridge.BackupDatabaseServer\Devbridge.BackupDatabaseServer.csproj", "{E27C9B4E-C2D9-41AD-AF13-2E02A82560FD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devbridge.BackupDatabaseAzureStorage", "Devbridge.BackupDatabaseAzureStorage\Devbridge.BackupDatabaseAzureStorage.csproj", "{B3C134F6-E768-4C55-B11F-717214AC500D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{E27C9B4E-C2D9-41AD-AF13-2E02A82560FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E27C9B4E-C2D9-41AD-AF13-2E02A82560FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E27C9B4E-C2D9-41AD-AF13-2E02A82560FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3C134F6-E768-4C55-B11F-717214AC500D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3C134F6-E768-4C55-B11F-717214AC500D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3C134F6-E768-4C55-B11F-717214AC500D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3C134F6-E768-4C55-B11F-717214AC500D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

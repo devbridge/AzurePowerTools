@@ -12,8 +12,18 @@ namespace Devbridge.BackupDatabaseServer
         static void Main(string[] args)
         {
             var exportFacade = new ExportFacade(Settings.Default.ConnectionString);
-            exportFacade.ExportAllDatabases();
+            if (Settings.Default.BackupedDatabases != null && Settings.Default.BackupedDatabases.Count > 0)
+            {
+                exportFacade.ExportDatabases(Settings.Default.BackupedDatabases.Cast<string>().ToList());
+            }
+            else
+            {
+                exportFacade.ExportAllDatabases();
+            }
+
             exportFacade.CleanupOlderBackups();
+
+          
         }
     }
 }

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Devbridge.BackupDatabaseServer.Properties {
+namespace Devbridge.BackupDatabaseAzureStorage.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -25,16 +25,52 @@ namespace Devbridge.BackupDatabaseServer.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("DatabaseBackups")]
-        public string BackupsDir {
+        [global::System.Configuration.DefaultSettingValueAttribute("https://ch1prod-dacsvc.azure.com/DACWebService.svc")]
+        public string DACWebServiceUrl {
             get {
-                return ((string)(this["BackupsDir"]));
+                return ((string)(this["DACWebServiceUrl"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("14")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Webtype")]
+        public string DatabaseUserName {
+            get {
+                return ((string)(this["DatabaseUserName"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://{2}.blob.core.windows.net/{3}/{0}/{0}-{1:yyyy-MM-dd-hh-mm-ss-fff}.bacpac")]
+        public string ExportFileNameFormat {
+            get {
+                return ((string)(this["ExportFileNameFormat"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("webtype")]
+        public string StorageName {
+            get {
+                return ((string)(this["StorageName"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("databasebackups")]
+        public string BackupsContainer {
+            get {
+                return ((string)(this["BackupsContainer"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
         public int BackupFilesToKeep {
             get {
                 return ((int)(this["BackupFilesToKeep"]));
@@ -43,10 +79,19 @@ namespace Devbridge.BackupDatabaseServer.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("{0}_{1:yyyy-MM-dd_hh-mm-ss-fff}")]
-        public string FileNameFormat {
+        [global::System.Configuration.DefaultSettingValueAttribute("[StorageAccessKey]")]
+        public string StorageAccessKey {
             get {
-                return ((string)(this["FileNameFormat"]));
+                return ((string)(this["StorageAccessKey"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("[Password]")]
+        public string DatabaseUserPassword {
+            get {
+                return ((string)(this["DatabaseUserPassword"]));
             }
         }
         
@@ -54,7 +99,7 @@ namespace Devbridge.BackupDatabaseServer.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
             "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>TestBackup</string>\r\n</ArrayOfString>")]
+            "tring>WebtypeLogs</string>\r\n  <string>Webtype</string>\r\n</ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection BackupedDatabases {
             get {
                 return ((global::System.Collections.Specialized.StringCollection)(this["BackupedDatabases"]));
@@ -63,49 +108,10 @@ namespace Devbridge.BackupDatabaseServer.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Webtype")]
-        public string BlobDBUserName {
+        [global::System.Configuration.DefaultSettingValueAttribute("asadasdv.database.windows.net")]
+        public string DatabaseServerName {
             get {
-                return ((string)(this["BlobDBUserName"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("tcp:sdasadasfg.database.windows.net")]
-        public string BlobDBServerName {
-            get {
-                return ((string)(this["BlobDBServerName"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("[Password]")]
-        public string BlogDBUserPsw {
-            get {
-                return ((string)(this["BlogDBUserPsw"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("DefaultEndpointsProtocol=https;AccountName=webtype;AccountKey=[ACCOUNTKEY]")]
-        public string BlobConnectionString {
-            get {
-                return ((string)(this["BlobConnectionString"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=tcp:asdasdasd.database.windows.net,1433;Integrated Security=False;Use" +
-            "r ID=[UserId];Password=[Password];Connect Timeout=15;Encrypt=False;TrustServerCe" +
-            "rtificate=False")]
-        public string ConnectionString {
-            get {
-                return ((string)(this["ConnectionString"]));
+                return ((string)(this["DatabaseServerName"]));
             }
         }
     }
