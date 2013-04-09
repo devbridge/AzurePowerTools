@@ -8,3 +8,8 @@ _ReSharper.*
 *.cache
 ~$*
 *.user
+
+#Nuget
+packages/**
+!packages/repositories.config
+!packages.config
