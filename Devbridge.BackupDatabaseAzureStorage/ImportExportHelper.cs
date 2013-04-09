@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Threading;
 using System.Web;
 using System.Xml;
 using Common.Logging;
@@ -104,6 +105,11 @@ namespace Devbridge.BackupDatabaseAzureStorage
                         exportedBlobPath = statusInfo.BlobUri;
                         logger.Info(String.Format("Export Complete - Database exported to: {0}\n\r", exportedBlobPath));
                         exportComplete = true;
+                    }
+
+                    if (!exportComplete)
+                    {
+                        Thread.Sleep(3000);
                     }
                 }
 
