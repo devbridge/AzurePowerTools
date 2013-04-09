@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Common.Logging;
 using Devbridge.BackupDatabaseAzureStorage.Properties;
 using Microsoft.WindowsAzure.Storage;
@@ -15,31 +10,21 @@ using Microsoft.WindowsAzure.Storage.Blob;
 namespace Devbridge.BackupDatabaseAzureStorage
 {
     public class ExportFacade
-    {      
-        private readonly ILog logger = LogManager.GetCurrentClassLogger();        
+    {
+        private readonly ILog logger = LogManager.GetCurrentClassLogger();
 
         public void Export(string databaseName)
         {
-            ImportExportHelper ieHelper = new ImportExportHelper();
+            var ieHelper = new ImportExportHelper();
 
             //Set Inputs to the REST Requests in the helper class         
-            ieHelper.EndPointUri = Properties.Settings.Default.DACWebServiceUrl;
-            ieHelper.ServerName = Properties.Settings.Default.DatabaseServerName;
-            ieHelper.StorageKey = Properties.Settings.Default.StorageAccessKey;
+            ieHelper.EndPointUri = Settings.Default.DACWebServiceUrl;
+            ieHelper.ServerName = Settings.Default.DatabaseServerName;
+            ieHelper.StorageKey = Settings.Default.StorageAccessKey;
             ieHelper.DatabaseName = databaseName;
-            ieHelper.UserName = Properties.Settings.Default.DatabaseUserName;
-            ieHelper.Password = Properties.Settings.Default.DatabaseUserPassword;
-
-            //Do Export operation
-            string exportBlobPath = ieHelper.DoExport(
-                String.Format(
-                    Properties.Settings.Default.ExportFileNameFormat,
-                    ieHelper.DatabaseName,
-                    DateTime.Now,
-                    Properties.Settings.Default.StorageName,
-                    Properties.Settings.Default.BackupsContainer
-                    ));
-        }      
+            ieHelper.UserName = Settings.Default.DatabaseUserName;
+            ieHelper.Password = Settings.Default.DatabaseUserPassword;
+        }
 
         public void ExportDatabases(IList<string> allDatabases)
         {
@@ -62,34 +47,36 @@ namespace Devbridge.BackupDatabaseAzureStorage
         {
             logger.Info("CleanupOlderBackups started");
             var storageAccount = new CloudStorageAccount(
-                new StorageCredentials(Properties.Settings.Default.StorageName, Properties.Settings.Default.StorageAccessKey),
+                new StorageCredentials(Settings.Default.StorageName, Settings.Default.StorageAccessKey),
                 true);
             var blobClient = storageAccount.CreateCloudBlobClient();
-            var container = blobClient.GetContainerReference(Properties.Settings.Default.BackupsContainer);
+            var container = blobClient.GetContainerReference(Settings.Default.BackupsContainer);
             var filesToKeep = Settings.Default.BackupFilesToKeep;
             try
             {
-                var databaseDirs = container.ListBlobs(null, false);
-                foreach (IListBlobItem item in databaseDirs)
+                var databaseDirs = container.ListBlobs();
+                foreach (var item in databaseDirs)
                 {
                     if (item.GetType() == typeof(CloudBlobDirectory))
                     {
-                        CloudBlobDirectory directory = (CloudBlobDirectory)item;
+                        var directory = (CloudBlobDirectory)item;
                         var databaseBackups = directory.ListBlobs();
 
-                        var filesToDelete = databaseBackups.Where(b=>b is CloudBlockBlob).Cast<CloudBlockBlob>()
-                            .OrderByDescending(fi => fi.Properties.LastModified).Skip(filesToKeep);
+                        var filesToDelete = databaseBackups.Where(b => b is CloudBlockBlob).Cast<CloudBlockBlob>()
+                                               .OrderByDescending(fi => fi.Properties.LastModified).Skip(filesToKeep);
+
                         foreach (var fileToDelete in filesToDelete)
                         {
                             try
                             {
+                                logger.InfoFormat("Deleting: {0}", fileToDelete.Name);
                                 fileToDelete.Delete();
                             }
                             catch (Exception ex)
                             {
                                 logger.ErrorFormat("Error occured while deleting file '{0}'", ex, fileToDelete.Uri);
                             }
-                        }                       
+                        }
                     }
                 }
 
@@ -123,8 +110,8 @@ namespace Devbridge.BackupDatabaseAzureStorage
             catch (Exception ex)
             {
                 logger.Error("Error occured in CleanupOlderBackups", ex);
-                throw ex;
+                throw;
             }
-        }      
+        }
     }
 }
