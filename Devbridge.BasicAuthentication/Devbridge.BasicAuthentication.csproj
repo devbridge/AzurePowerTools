@@ -49,6 +49,10 @@
     <Compile Include="Configuration\BasicAuthenticationConfigurationSection.cs" />
     <Compile Include="Configuration\CredentialElement.cs" />
     <Compile Include="Configuration\CredentialElementCollection.cs" />
+    <Compile Include="Configuration\ExcludeUrlElement.cs" />
+    <Compile Include="Configuration\ExcludeUrlElementCollection.cs" />
+    <Compile Include="Configuration\ExcludeVerbElement.cs" />
+    <Compile Include="Configuration\ExcludeVerbElementCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
