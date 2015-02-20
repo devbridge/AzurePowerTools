@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devbridge.BasicAuthentication", "Devbridge.BasicAuthentication\Devbridge.BasicAuthentication.csproj", "{8B8D3FF3-9E4B-48D9-8BEF-52AB2651638A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devbridge.BasicAuthentication.Test", "Devbridge.BasicAuthentication.Test\Devbridge.BasicAuthentication.Test.csproj", "{11EBC198-765A-4017-9091-CCD5D934015A}"
-EndProject
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{743822B6-591F-46ED-88C6-BC4B236DEFE5}"
 	ProjectSection(SolutionItems) = preProject
 		SharedAssemblyInfo.cs = SharedAssemblyInfo.cs
@@ -15,16 +13,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PowerShell", "PowerShell", 
 		PowerShell\PublishCloudService.ps1 = PowerShell\PublishCloudService.ps1
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devbridge.BackupDatabaseServer", "Devbridge.BackupDatabaseServer\Devbridge.BackupDatabaseServer.csproj", "{E27C9B4E-C2D9-41AD-AF13-2E02A82560FD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devbridge.BackupDatabaseAzureStorage", "Devbridge.BackupDatabaseAzureStorage\Devbridge.BackupDatabaseAzureStorage.csproj", "{B3C134F6-E768-4C55-B11F-717214AC500D}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{9D330DCB-F771-4959-A7C5-053D4FBC313B}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devbridge.BasicAuthentication", "Devbridge.BasicAuthentication\Devbridge.BasicAuthentication.csproj", "{8B8D3FF3-9E4B-48D9-8BEF-52AB2651638A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devbridge.BasicAuthentication.Test", "Devbridge.BasicAuthentication.Test\Devbridge.BasicAuthentication.Test.csproj", "{11EBC198-765A-4017-9091-CCD5D934015A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devbridge.BackupDatabaseServer", "Devbridge.BackupDatabaseServer\Devbridge.BackupDatabaseServer.csproj", "{E27C9B4E-C2D9-41AD-AF13-2E02A82560FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devbridge.BackupDatabaseAzureStorage", "Devbridge.BackupDatabaseAzureStorage\Devbridge.BackupDatabaseAzureStorage.csproj", "{B3C134F6-E768-4C55-B11F-717214AC500D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
