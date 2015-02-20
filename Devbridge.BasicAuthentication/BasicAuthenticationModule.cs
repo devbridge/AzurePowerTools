@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Web;
 
@@ -61,6 +62,8 @@ namespace Devbridge.BasicAuthentication
 
         private IDictionary<string, string> activeUsers;
 
+        private bool allowRedirects;
+
         public void AuthenticateUser(Object source, EventArgs e)
         {
             var context = ((HttpApplication)source).Context;
@@ -94,6 +97,11 @@ namespace Devbridge.BasicAuthentication
         {
             var context = ((HttpApplication)source).Context;
 
+            if (allowRedirects && IsRedirect(context.Response.StatusCode))
+            {
+                return;
+            }
+
             // if authentication cookie is not set issue a basic challenge
             var authCookie = context.Request.Cookies.Get(AuthenticationCookieName);
             if (authCookie == null)
@@ -106,6 +114,16 @@ namespace Devbridge.BasicAuthentication
                     context.Response.AddHeader(HttpWwwAuthenticateHeader, "Basic realm =\"" + Realm + "\"");
                 }
             }
+        }
+
+        private static bool IsRedirect(int httpStatusCode)
+        {
+            return new[]
+            {
+                HttpStatusCode.MovedPermanently,
+                HttpStatusCode.Redirect,
+                HttpStatusCode.TemporaryRedirect
+            }.Any(c => (int)c == httpStatusCode);
         }
 
         protected virtual bool ValidateCredentials(string userName, string password)
@@ -167,6 +185,8 @@ namespace Devbridge.BasicAuthentication
                 var credential = basicAuth.Credentials[i];
                 this.activeUsers.Add(credential.UserName, credential.Password);
             }
+
+            this.allowRedirects = basicAuth.AllowRedirects;
 
             // Subscribe to the authenticate event to perform the authentication.
             context.AuthenticateRequest += AuthenticateUser;
