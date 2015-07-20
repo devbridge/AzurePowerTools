@@ -3,7 +3,7 @@ using System.Configuration;
 
 namespace Devbridge.BasicAuthentication.Configuration
 {
-    public class ExcludeVerbElement : ConfigurationElement
+    public class ExcludeElement : ConfigurationElement
     {
         private const string UrlAttribute = "url";
         private const string VerbAttribute = "verb";
@@ -27,7 +27,7 @@ namespace Devbridge.BasicAuthentication.Configuration
         /// <value>
         /// The verb.
         /// </value>
-        [ConfigurationProperty(VerbAttribute, IsRequired = true)]
+        [ConfigurationProperty(VerbAttribute, IsRequired = false)]
         public string Verb
         {
             get { return Convert.ToString(this[VerbAttribute]); }

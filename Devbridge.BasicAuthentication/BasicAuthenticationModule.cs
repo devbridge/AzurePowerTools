@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 
 namespace Devbridge.BasicAuthentication
@@ -61,10 +62,11 @@ namespace Devbridge.BasicAuthentication
         public const string Realm = "demo";
 
         private IDictionary<string, string> activeUsers;
-        private IDictionary<string, List<string>> excludesVerb;
-        private IDictionary<string, List<string>> excludesUrl;
+        private IDictionary<Regex, Regex> excludes;
 
         private bool allowRedirects;
+
+        private readonly static Regex AllowAnyRegex = new Regex(".*", RegexOptions.Compiled);
 
         public void AuthenticateUser(Object source, EventArgs e)
         {
@@ -121,40 +123,16 @@ namespace Devbridge.BasicAuthentication
             }
         }
 
+        /// <summary>
+        /// Returns true if authentication challenge should be sent to client based on configured exclude rules
+        /// </summary>
         private bool ShouldChallenge(HttpContext context)
         {
-            if (excludesVerb.ContainsKey(context.Request.HttpMethod.ToUpper())) 
+            foreach (var urlVerbRegex in this.excludes)
             {
-                var urls = excludesVerb[context.Request.HttpMethod.ToUpper()];
-                if (urls.Contains(""))
+                if (urlVerbRegex.Key.IsMatch(context.Request.Path) && urlVerbRegex.Value.IsMatch(context.Request.HttpMethod))
                 {
-                    //if the empty URL is in the list, the config means that we should bypass challenge for this verb
-                    //for every URL
                     return false;
-                }
-                else
-                {
-                    if (urls.Contains(context.Request.Path.ToUpper())) {
-                        return false;
-                    }
-                }
-            }
-
-            if (excludesUrl.ContainsKey(context.Request.Path.ToUpper()))
-            {
-                var verbs = excludesUrl[context.Request.Path.ToUpper()];
-                if (verbs.Contains(""))
-                {
-                    //if the empty verb is in the list, the config means that we should bypass challenge for this url
-                    //for every verb
-                    return false;
-                }
-                else
-                {
-                    if (verbs.Contains(context.Request.HttpMethod.ToUpper()))
-                    {
-                        return false;
-                    }
                 }
             }
 
@@ -248,40 +226,33 @@ namespace Devbridge.BasicAuthentication
 
         private void InitExcludes(Configuration.BasicAuthenticationConfigurationSection basicAuth)
         {
-            this.excludesUrl = new Dictionary<string, List<string>>();
-            this.excludesVerb = new Dictionary<string, List<string>>();
+            var excludesAsString = new Dictionary<string, string>();
+            this.excludes = new Dictionary<Regex, Regex>();
+            var allowAnyRegex = AllowAnyRegex.ToString();
 
-            for (int i = 0; i < basicAuth.ExcludeUrls.Count; i++)
+            for (int i = 0; i < basicAuth.Excludes.Count; i++)
             {
-                var excludeUrl = basicAuth.ExcludeUrls[i];
+                var excludeUrl = basicAuth.Excludes[i].Url;
+                var excludeVerb = basicAuth.Excludes[i].Verb;
 
-                if (!String.IsNullOrEmpty(excludeUrl.Url)) {
-                    if (excludesUrl.ContainsKey(excludeUrl.Url.ToUpper()))
-                    {
-                        excludesUrl[excludeUrl.Url.ToUpper()].Add(excludeUrl.Verb);
-                    }
-                    else
-                    {
-                        excludesUrl.Add(excludeUrl.Url.ToUpper(), new List<string> { excludeUrl.Verb });
-                    }
-                }                    
+                if (string.IsNullOrEmpty(excludeUrl))
+                {
+                    excludeUrl = allowAnyRegex;
+                }
+                if (string.IsNullOrEmpty(excludeVerb))
+                {
+                    excludeVerb = allowAnyRegex;
+                }
+
+                excludesAsString[excludeUrl] = excludeVerb;
             }
 
-            for (int i = 0; i < basicAuth.ExcludeVerbs.Count; i++)
+            foreach(var url in excludesAsString.Keys)
             {
-                var excludeVerb = basicAuth.ExcludeVerbs[i];
+                var urlRegex = url == allowAnyRegex ? AllowAnyRegex : new Regex(url, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                var verbRegex = excludesAsString[url] == allowAnyRegex ? AllowAnyRegex : new Regex(excludesAsString[url], RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-                if (!String.IsNullOrEmpty(excludeVerb.Verb))
-                {
-                    if (excludesVerb.ContainsKey(excludeVerb.Verb.ToUpper()))
-                    {
-                        excludesVerb[excludeVerb.Verb.ToUpper()].Add(excludeVerb.Url);
-                    }
-                    else
-                    {
-                        excludesVerb.Add(excludeVerb.Verb.ToUpper(), new List<string> { excludeVerb.Url });
-                    }
-                }
+                excludes[urlRegex] = verbRegex;
             }
         }
 

@@ -2,14 +2,14 @@
 
 namespace Devbridge.BasicAuthentication.Configuration
 {
-    [ConfigurationCollection(typeof(ExcludeVerbElement), CollectionType = ConfigurationElementCollectionType.BasicMap)]
-    public class ExcludeVerbElementCollection : ConfigurationElementCollection
+    [ConfigurationCollection(typeof(ExcludeElement), CollectionType = ConfigurationElementCollectionType.BasicMap)]
+    public class ExcludeElementCollection : ConfigurationElementCollection
     {
-        public ExcludeVerbElement this[int index]
+        public ExcludeElement this[int index]
         {
             get
             {
-                return (ExcludeVerbElement)BaseGet(index);
+                return (ExcludeElement)BaseGet(index);
             }
             set
             {
@@ -23,12 +23,12 @@ namespace Devbridge.BasicAuthentication.Configuration
 
         protected override ConfigurationElement CreateNewElement()
         {
-            return new ExcludeVerbElement();
+            return new ExcludeElement();
         }
 
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return ((ExcludeVerbElement)element).Verb;
+            return ((ExcludeElement)element).Verb;
         }
 
     }
