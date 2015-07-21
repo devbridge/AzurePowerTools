@@ -5,6 +5,7 @@ namespace Devbridge.BasicAuthentication.Configuration
     public class BasicAuthenticationConfigurationSection : ConfigurationSection
     {
         private const string CredentialsNode = "credentials";
+        private const string ExcludesNode = "excludes";
 
         /// <summary>
         /// Gets or sets the credentials.
@@ -30,6 +31,19 @@ namespace Devbridge.BasicAuthentication.Configuration
         {
             get { return (bool)this["allowRedirects"]; }
             set { this["allowRedirects"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the URL exclusions.
+        /// </summary>
+        /// <value>
+        /// The URL exclusions.
+        /// </value>
+        [ConfigurationProperty(ExcludesNode, IsRequired = false)]
+        public ExcludeElementCollection Excludes
+        {
+            get { return (ExcludeElementCollection)this[ExcludesNode]; }
+            set { this[ExcludesNode] = value; }
         }
     }
 }

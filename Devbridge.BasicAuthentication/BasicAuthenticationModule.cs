@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 
 namespace Devbridge.BasicAuthentication
@@ -60,9 +61,31 @@ namespace Devbridge.BasicAuthentication
         /// </summary>
         public const string Realm = "demo";
 
+        /// <summary>
+        /// The credentials that are allowed to access the site.
+        /// </summary>
         private IDictionary<string, string> activeUsers;
 
+        /// <summary>
+        /// Exclude configuration - request URL is matched to dictionary key and request method is matched to the value of the same key-value pair.
+        /// </summary>
+        private IDictionary<Regex, Regex> excludes;
+
+        /// <summary>
+        /// Indicates whether redirects are allowed without authentication.
+        /// </summary>
         private bool allowRedirects;
+
+        /// <summary>
+        /// Regular expression that matches any given string.
+        /// </summary>
+        private readonly static Regex AllowAnyRegex = new Regex(".*", RegexOptions.Compiled);
+
+        /// <summary>
+        /// Dictionary that caches whether basic authentication challenge should be sent. Key is request URL + request method, value indicates whether
+        /// challenge should be sent.
+        /// </summary>
+        private static IDictionary<string, bool> shouldChallengeCache = new Dictionary<string, bool>();
 
         public void AuthenticateUser(Object source, EventArgs e)
         {
@@ -102,18 +125,48 @@ namespace Devbridge.BasicAuthentication
                 return;
             }
 
-            // if authentication cookie is not set issue a basic challenge
-            var authCookie = context.Request.Cookies.Get(AuthenticationCookieName);
-            if (authCookie == null)
+            if (ShouldChallenge(context)) 
             {
-                //make sure that user is not authencated yet
-                if (!context.Response.Cookies.AllKeys.Contains(AuthenticationCookieName))
+                // if authentication cookie is not set issue a basic challenge
+                var authCookie = context.Request.Cookies.Get(AuthenticationCookieName);
+                if (authCookie == null)
                 {
-                    context.Response.Clear();
-                    context.Response.StatusCode = HttpNotAuthorizedStatusCode;
-                    context.Response.AddHeader(HttpWwwAuthenticateHeader, "Basic realm =\"" + Realm + "\"");
+                    //make sure that user is not authencated yet
+                    if (!context.Response.Cookies.AllKeys.Contains(AuthenticationCookieName))
+                    {
+                        context.Response.Clear();
+                        context.Response.StatusCode = HttpNotAuthorizedStatusCode;
+                        context.Response.AddHeader(HttpWwwAuthenticateHeader, "Basic realm =\"" + Realm + "\"");
+                    }
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns true if authentication challenge should be sent to client based on configured exclude rules
+        /// </summary>
+        private bool ShouldChallenge(HttpContext context)
+        {
+            // first check cache
+            var key = string.Concat(context.Request.Path, context.Request.HttpMethod);
+            if (shouldChallengeCache.ContainsKey(key))
+            {
+                return shouldChallengeCache[key];
+            }
+
+            // if value is not found in cache check exclude rules
+            foreach (var urlVerbRegex in this.excludes)
+            {
+                if (urlVerbRegex.Key.IsMatch(context.Request.Path) && urlVerbRegex.Value.IsMatch(context.Request.HttpMethod))
+                {
+                    shouldChallengeCache[key] = false;
+
+                    return false;
+                }
+            }
+
+            shouldChallengeCache[key] = true;
+            return true;
         }
 
         private static bool IsRedirect(int httpStatusCode)
@@ -178,6 +231,20 @@ namespace Devbridge.BasicAuthentication
         {
             var config = System.Configuration.ConfigurationManager.GetSection("basicAuth");
             var basicAuth = (Configuration.BasicAuthenticationConfigurationSection)config;
+
+            this.allowRedirects = basicAuth.AllowRedirects;
+            InitCredentials(basicAuth);
+            InitExcludes(basicAuth);
+
+            // Subscribe to the authenticate event to perform the authentication.
+            context.AuthenticateRequest += AuthenticateUser;
+
+            // Subscribe to the EndRequest event to issue the authentication challenge if necessary.
+            context.EndRequest += IssueAuthenticationChallenge;
+        }
+
+        private void InitCredentials(Configuration.BasicAuthenticationConfigurationSection basicAuth)
+        {
             this.activeUsers = new Dictionary<string, string>();
 
             for (int i = 0; i < basicAuth.Credentials.Count; i++)
@@ -185,14 +252,38 @@ namespace Devbridge.BasicAuthentication
                 var credential = basicAuth.Credentials[i];
                 this.activeUsers.Add(credential.UserName, credential.Password);
             }
+        }
 
-            this.allowRedirects = basicAuth.AllowRedirects;
+        private void InitExcludes(Configuration.BasicAuthenticationConfigurationSection basicAuth)
+        {
+            var excludesAsString = new Dictionary<string, string>();
+            this.excludes = new Dictionary<Regex, Regex>();
+            var allowAnyRegex = AllowAnyRegex.ToString();
 
-            // Subscribe to the authenticate event to perform the authentication.
-            context.AuthenticateRequest += AuthenticateUser;
+            for (int i = 0; i < basicAuth.Excludes.Count; i++)
+            {
+                var excludeUrl = basicAuth.Excludes[i].Url;
+                var excludeVerb = basicAuth.Excludes[i].Verb;
 
-            // Subscribe to the EndRequest event to issue the authentication challenge if necessary.
-            context.EndRequest += IssueAuthenticationChallenge;
+                if (string.IsNullOrEmpty(excludeUrl))
+                {
+                    excludeUrl = allowAnyRegex;
+                }
+                if (string.IsNullOrEmpty(excludeVerb))
+                {
+                    excludeVerb = allowAnyRegex;
+                }
+
+                excludesAsString[excludeUrl] = excludeVerb;
+            }
+
+            foreach(var url in excludesAsString.Keys)
+            {
+                var urlRegex = url == allowAnyRegex ? AllowAnyRegex : new Regex(url, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                var verbRegex = excludesAsString[url] == allowAnyRegex ? AllowAnyRegex : new Regex(excludesAsString[url], RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+                excludes[urlRegex] = verbRegex;
+            }
         }
 
         public void Dispose()
