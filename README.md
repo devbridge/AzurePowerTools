@@ -10,3 +10,19 @@ Basic authentication for Windows Azure websites is a HTTP managed module that pr
 Basic authentication module has relation to two projects:
 - Devbridge.BasicAuthentication project has the implementation for the basic authentication module.
 - Devbridge.BasicAuthentication.Test is simple test website that can be used to test basic authentication.
+
+###Configuration Settings
+* `allowRedirects`: indicates whether redirects are allowed without authentication.
+* `excludes`: allows to configure rules to exclude certain parts of application from authentication.
+
+####Sample excludes
+```
+<!-- exclude POST requests to URLs starting with /home; other requests (GET to /home/index, POST to /account/login) should be authenticated -->
+<add url="^/home(.*)" verb="post" />
+<!-- exclude POST requests to all URLs; other requests (GET to /home/index, DELETE to /account/123) should be authenticated -->
+<add url="" verb="post" />
+<!-- exclude all requests to URLs starting with /allow; other requests should be authenticated -->
+<add url="^/allow(.*)" verb="" />
+<!-- exclude all requests to URLs starting with /home; rules specified below overwrite previous rules with the same url pattern.  -->
+<add url="^/home(.*)" verb="" />
+```
