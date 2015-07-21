@@ -111,7 +111,7 @@ namespace Devbridge.BasicAuthentication
             var authCookie = context.Request.Cookies.Get(AuthenticationCookieName);
             if (authCookie == null)
             {
-                authCookie = new HttpCookie(AuthenticationCookieName, "1") { Expires = DateTime.Now };
+                authCookie = new HttpCookie(AuthenticationCookieName, "1") { Expires = DateTime.Now.AddHours(1) };
                 context.Response.Cookies.Add(authCookie);
             }
         }
