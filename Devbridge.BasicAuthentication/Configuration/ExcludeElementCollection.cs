@@ -28,8 +28,7 @@ namespace Devbridge.BasicAuthentication.Configuration
 
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return ((ExcludeElement)element).Verb;
+            return ((ExcludeElement)element).ToString();
         }
-
     }
 }

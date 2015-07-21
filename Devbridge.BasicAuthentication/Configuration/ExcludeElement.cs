@@ -14,7 +14,7 @@ namespace Devbridge.BasicAuthentication.Configuration
         /// <value>
         /// The url.
         /// </value>
-        [ConfigurationProperty(UrlAttribute, IsRequired = false)]
+        [ConfigurationProperty(UrlAttribute, IsRequired = false, IsKey = false)]
         public string Url
         {
             get { return Convert.ToString(this[UrlAttribute]); }
@@ -27,12 +27,16 @@ namespace Devbridge.BasicAuthentication.Configuration
         /// <value>
         /// The verb.
         /// </value>
-        [ConfigurationProperty(VerbAttribute, IsRequired = false)]
+        [ConfigurationProperty(VerbAttribute, IsRequired = false, IsKey = false)]
         public string Verb
         {
             get { return Convert.ToString(this[VerbAttribute]); }
             set { this[VerbAttribute] = value; }
         }
 
+        public override string ToString()
+        {
+            return string.Concat(Url, '_', Verb);
+        }
     }
 }
