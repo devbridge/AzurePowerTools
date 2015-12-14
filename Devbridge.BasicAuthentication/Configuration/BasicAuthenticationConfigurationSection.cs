@@ -34,6 +34,19 @@ namespace Devbridge.BasicAuthentication.Configuration
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether authenticaiton module should allow local requests without issuing auth challenge.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> to allow redirects; otherwise, <c>false</c>.
+        /// </value>
+        [ConfigurationProperty("allowLocal", DefaultValue = "false", IsRequired = false)]
+        public bool AllowLocal
+        {
+            get { return (bool)this["allowLocal"]; }
+            set { this["allowLocal"] = value; }
+        }
+
+        /// <summary>
         /// Gets or sets the URL exclusions.
         /// </summary>
         /// <value>

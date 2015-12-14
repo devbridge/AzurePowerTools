@@ -77,6 +77,11 @@ namespace Devbridge.BasicAuthentication
         private bool allowRedirects;
 
         /// <summary>
+        /// Indicates whether local requests are allowed without authentication.
+        /// </summary>
+        private bool allowLocal;
+
+        /// <summary>
         /// Regular expression that matches any given string.
         /// </summary>
         private readonly static Regex AllowAnyRegex = new Regex(".*", RegexOptions.Compiled);
@@ -119,6 +124,11 @@ namespace Devbridge.BasicAuthentication
         public void IssueAuthenticationChallenge(Object source, EventArgs e)
         {
             var context = ((HttpApplication)source).Context;
+
+            if (allowLocal && context.Request.IsLocal)
+            {
+                return;
+            }
 
             if (allowRedirects && IsRedirect(context.Response.StatusCode))
             {
@@ -232,7 +242,9 @@ namespace Devbridge.BasicAuthentication
             var config = System.Configuration.ConfigurationManager.GetSection("basicAuth");
             var basicAuth = (Configuration.BasicAuthenticationConfigurationSection)config;
 
-            this.allowRedirects = basicAuth.AllowRedirects;
+            allowRedirects = basicAuth.AllowRedirects;
+            allowLocal = basicAuth.AllowLocal;
+
             InitCredentials(basicAuth);
             InitExcludes(basicAuth);
 
