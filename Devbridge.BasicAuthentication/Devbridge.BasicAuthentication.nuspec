@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>Devbridge.BasicAuthentication-forkedheader</id>
+    <version>1.0.0</version>
+    <authors>devbridge team</authors>
+    <owners>devbridge</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>
+      This library contains basic authentification module, which can be mainly used for Azure websites. Not intended for production use.
+    </description>
+    <projectUrl>https://github.com/JohanSpannare/AzurePowerTools</projectUrl>
+    <copyright>Copyright 2015</copyright>
+    <tags>iis, basic authetification, azure</tags>
+    <language>en-US</language>
+  </metadata>
+  <!-- Example of explicit file inclusion -->
+  <files>
+    <file src="bin\Release\Devbridge.BasicAuthentication.dll" target="lib\net40" />
+    <!--<file src="bin\Nuget40\Devbridge.BasicAuthentication.dll" target="lib\net40" />-->
+    <file src="**\*.cs" target="src" />
+    <file src="Config\**" target="content\Config" />
+    <file src="*.xdt" target="content" />
+  </files>
+</package>

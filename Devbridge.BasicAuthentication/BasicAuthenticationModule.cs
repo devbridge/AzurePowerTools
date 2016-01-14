@@ -112,6 +112,12 @@ namespace Devbridge.BasicAuthentication
                 return;
             }
 
+            // Add Header with same name as Cookie
+            if (context.Request.Headers.AllKeys.FirstOrDefault(x => x.Equals(AuthenticationCookieName)) == null)
+            {
+                context.Request.Headers.Add(AuthenticationCookieName, userName);
+            }
+
             // check whether cookie is set and send it to client if needed
             var authCookie = context.Request.Cookies.Get(AuthenticationCookieName);
             if (authCookie == null)
