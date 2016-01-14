@@ -55,6 +55,12 @@
     <Compile Include="Configuration\ExcludeElementCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Config\basicAuthentication.config" />
+    <None Include="Devbridge.BasicAuthentication.nuspec" />
+    <None Include="web.config.install.xdt" />
+    <None Include="web.config.uninstall.xdt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
