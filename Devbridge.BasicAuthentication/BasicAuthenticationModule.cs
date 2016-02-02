@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -239,8 +240,14 @@ namespace Devbridge.BasicAuthentication
 
         public void Init(HttpApplication context)
         {
-            var config = System.Configuration.ConfigurationManager.GetSection("basicAuth");
-            var basicAuth = (Configuration.BasicAuthenticationConfigurationSection)config;
+            var config = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("~/web.config");
+            var basicAuth = TraverseConfigSections<Configuration.BasicAuthenticationConfigurationSection>(config.RootSectionGroup);
+
+            if (basicAuth == null)
+            {
+                System.Diagnostics.Debug.WriteLine("BasicAuthenticationModule not started - Configuration not found. Make sure that BasicAuthenticationConfigurationSection section is defined.");
+                return;
+            }
 
             allowRedirects = basicAuth.AllowRedirects;
             allowLocal = basicAuth.AllowLocal;
@@ -296,6 +303,26 @@ namespace Devbridge.BasicAuthentication
 
                 excludes[urlRegex] = verbRegex;
             }
+        }
+
+        private T TraverseConfigSections<T>(ConfigurationSectionGroup group) where T : ConfigurationSection
+        {
+            foreach (ConfigurationSection section in group.Sections)
+            {
+                if (Type.GetType(section.SectionInformation.Type, false) == typeof(T))
+                    return (T)section;
+            }
+
+            foreach (ConfigurationSectionGroup g in group.SectionGroups)
+            {
+                var section = this.TraverseConfigSections<T>(g);
+                if (section != null)
+                {
+                    return section;
+                }
+            }
+
+            return null;
         }
 
         public void Dispose()
