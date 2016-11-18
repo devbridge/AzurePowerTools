@@ -168,7 +168,7 @@ namespace Devbridge.BasicAuthentication
             // if value is not found in cache check exclude rules
             foreach (var urlVerbRegex in this.excludes)
             {
-                if (urlVerbRegex.Key.IsMatch(context.Request.Path) && urlVerbRegex.Value.IsMatch(context.Request.HttpMethod))
+                if ((urlVerbRegex.Key.IsMatch(context.Request.Path) || urlVerbRegex.Key.IsMatch(context.Request.Url.Host)) && urlVerbRegex.Value.IsMatch(context.Request.HttpMethod))
                 {
                     shouldChallengeCache[key] = false;
 
