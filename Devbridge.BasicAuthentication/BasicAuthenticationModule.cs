@@ -62,10 +62,15 @@ namespace Devbridge.BasicAuthentication
         /// </summary>
         public const string Realm = "demo";
 
-        /// <summary>
-        /// The credentials that are allowed to access the site.
-        /// </summary>
-        private IDictionary<string, string> activeUsers;
+				/// <summary>
+				/// The delimiter in the cookie
+				/// </summary>
+				private const string CookieCredentialDelimiter = "~:||:~";
+
+				/// <summary>
+				/// The credentials that are allowed to access the site.
+				/// </summary>
+				private IDictionary<string, string> activeUsers;
 
         /// <summary>
         /// Exclude configuration - request URL is matched to dictionary key and request method is matched to the value of the same key-value pair.
@@ -117,7 +122,7 @@ namespace Devbridge.BasicAuthentication
             var authCookie = context.Request.Cookies.Get(AuthenticationCookieName);
             if (authCookie == null)
             {
-                authCookie = new HttpCookie(AuthenticationCookieName, "1") { Expires = DateTime.Now.AddHours(1) };
+                authCookie = new HttpCookie(AuthenticationCookieName, userName + CookieCredentialDelimiter + password) { Expires = DateTime.MaxValue };
                 context.Response.Cookies.Add(authCookie);
             }
         }
@@ -138,18 +143,42 @@ namespace Devbridge.BasicAuthentication
 
             if (ShouldChallenge(context)) 
             {
-                // if authentication cookie is not set issue a basic challenge
-                var authCookie = context.Request.Cookies.Get(AuthenticationCookieName);
-                if (authCookie == null)
-                {
-                    //make sure that user is not authencated yet
-                    if (!context.Response.Cookies.AllKeys.Contains(AuthenticationCookieName))
-                    {
-                        context.Response.Clear();
-                        context.Response.StatusCode = HttpNotAuthorizedStatusCode;
-                        context.Response.AddHeader(HttpWwwAuthenticateHeader, "Basic realm =\"" + Realm + "\"");
-                    }
-                }
+                //get the cookie
+                HttpCookie authCookie = context.Request.Cookies.Get(AuthenticationCookieName);
+
+								// if authentication cookie is not set issue a basic challenge
+								if (authCookie == null)
+								{
+									context.Response.Clear();
+									context.Response.StatusCode = HttpNotAuthorizedStatusCode;
+									context.Response.AddHeader(HttpWwwAuthenticateHeader, "Basic realm =\"" + Realm + "\"");
+									return;
+								}
+
+								//get the creds from the cookie
+								string usernameAndPass = authCookie.Value;
+								string[] parts = usernameAndPass.Split(new string[] { CookieCredentialDelimiter }, StringSplitOptions.None);
+
+								//if the cookie value isn't two parts, issue challenge
+								if (parts.Length != 2)
+								{
+									context.Response.Clear();
+									context.Response.StatusCode = HttpNotAuthorizedStatusCode;
+									context.Response.AddHeader(HttpWwwAuthenticateHeader, "Basic realm =\"" + Realm + "\"");
+									return;
+								}
+
+								string userName = parts[0];
+								string password = parts[1];
+
+								//if the creds don't validate, issue challenge
+								if (!ValidateCredentials(userName, password))
+								{
+									context.Response.Clear();
+									context.Response.StatusCode = HttpNotAuthorizedStatusCode;
+									context.Response.AddHeader(HttpWwwAuthenticateHeader, "Basic realm =\"" + Realm + "\"");
+									return;
+								}
             }
         }
 
