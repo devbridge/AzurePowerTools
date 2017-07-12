@@ -65,33 +65,33 @@ namespace Devbridge.BasicAuthentication
         /// <summary>
         /// The credentials that are allowed to access the site.
         /// </summary>
-        private IDictionary<string, string> activeUsers;
+        private static IDictionary<string, string> activeUsers;
 
         /// <summary>
         /// Exclude configuration - request URL is matched to dictionary key and request method is matched to the value of the same key-value pair.
         /// </summary>
-        private IDictionary<Regex, Regex> excludes;
+        private static IDictionary<Regex, Regex> excludes;
 
         /// <summary>
         /// Indicates whether redirects are allowed without authentication.
         /// </summary>
-        private bool allowRedirects;
+        private static bool allowRedirects;
 
         /// <summary>
         /// Indicates whether local requests are allowed without authentication.
         /// </summary>
-        private bool allowLocal;
+        private static bool allowLocal;
 
         /// <summary>
         /// Regular expression that matches any given string.
         /// </summary>
-        private readonly static Regex AllowAnyRegex = new Regex(".*", RegexOptions.Compiled);
+        private static readonly Regex AllowAnyRegex = new Regex(".*", RegexOptions.Compiled);
 
         /// <summary>
         /// Dictionary that caches whether basic authentication challenge should be sent. Key is request URL + request method, value indicates whether
         /// challenge should be sent.
         /// </summary>
-        private static IDictionary<string, bool> shouldChallengeCache = new Dictionary<string, bool>();
+        private static readonly IDictionary<string, bool> shouldChallengeCache = new Dictionary<string, bool>();
 
         public void AuthenticateUser(object source, EventArgs e)
         {
@@ -166,7 +166,7 @@ namespace Devbridge.BasicAuthentication
             }
 
             // if value is not found in cache check exclude rules
-            foreach (var urlVerbRegex in this.excludes)
+            foreach (var urlVerbRegex in excludes)
             {
                 if (urlVerbRegex.Key.IsMatch(context.Request.Path) && urlVerbRegex.Value.IsMatch(context.Request.HttpMethod))
                 {
@@ -237,6 +237,32 @@ namespace Devbridge.BasicAuthentication
 
         public void Init(HttpApplication context)
         {
+            InitInternal();
+
+            if (!IsInitDone())
+            {
+                return;
+            }
+
+            // Subscribe to the authenticate event to perform the authentication.
+            context.AuthenticateRequest += AuthenticateUser;
+
+            // Subscribe to the EndRequest event to issue the authentication challenge if necessary.
+            context.EndRequest += IssueAuthenticationChallenge;
+        }
+
+        private static bool IsInitDone()
+        {
+            return activeUsers != null;
+        }
+
+        private static void InitInternal()
+        {
+            if (IsInitDone())
+            {
+                return;
+            }
+
             var config = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("~/web.config");
             var basicAuth = TraverseConfigSections<Configuration.BasicAuthenticationConfigurationSection>(config.RootSectionGroup);
 
@@ -251,29 +277,23 @@ namespace Devbridge.BasicAuthentication
 
             InitCredentials(basicAuth);
             InitExcludes(basicAuth);
-
-            // Subscribe to the authenticate event to perform the authentication.
-            context.AuthenticateRequest += AuthenticateUser;
-
-            // Subscribe to the EndRequest event to issue the authentication challenge if necessary.
-            context.EndRequest += IssueAuthenticationChallenge;
         }
 
-        private void InitCredentials(Configuration.BasicAuthenticationConfigurationSection basicAuth)
+        private static void InitCredentials(Configuration.BasicAuthenticationConfigurationSection basicAuth)
         {
-            this.activeUsers = new Dictionary<string, string>();
+            activeUsers = new Dictionary<string, string>();
 
             for (int i = 0; i < basicAuth.Credentials.Count; i++)
             {
                 var credential = basicAuth.Credentials[i];
-                this.activeUsers.Add(credential.UserName, credential.Password);
+                activeUsers.Add(credential.UserName, credential.Password);
             }
         }
 
-        private void InitExcludes(Configuration.BasicAuthenticationConfigurationSection basicAuth)
+        private static void InitExcludes(Configuration.BasicAuthenticationConfigurationSection basicAuth)
         {
             var excludesAsString = new Dictionary<string, string>();
-            this.excludes = new Dictionary<Regex, Regex>();
+            excludes = new Dictionary<Regex, Regex>();
             var allowAnyRegex = AllowAnyRegex.ToString();
 
             for (int i = 0; i < basicAuth.Excludes.Count; i++)
@@ -302,7 +322,7 @@ namespace Devbridge.BasicAuthentication
             }
         }
 
-        private T TraverseConfigSections<T>(ConfigurationSectionGroup group) where T : ConfigurationSection
+        private static T TraverseConfigSections<T>(ConfigurationSectionGroup group) where T : ConfigurationSection
         {
             foreach (ConfigurationSection section in group.Sections)
             {
@@ -312,7 +332,7 @@ namespace Devbridge.BasicAuthentication
 
             foreach (ConfigurationSectionGroup g in group.SectionGroups)
             {
-                var section = this.TraverseConfigSections<T>(g);
+                var section = TraverseConfigSections<T>(g);
                 if (section != null)
                 {
                     return section;
