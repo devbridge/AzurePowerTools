@@ -182,12 +182,9 @@ namespace Devbridge.BasicAuthentication
 
         private static bool IsRedirect(int httpStatusCode)
         {
-            return new[]
-            {
-                HttpStatusCode.MovedPermanently,
-                HttpStatusCode.Redirect,
-                HttpStatusCode.TemporaryRedirect
-            }.Any(c => (int)c == httpStatusCode);
+            return httpStatusCode == (int)HttpStatusCode.MovedPermanently ||
+                   httpStatusCode == (int)HttpStatusCode.Redirect ||
+                   httpStatusCode == (int)HttpStatusCode.TemporaryRedirect;
         }
 
         protected virtual bool ValidateCredentials(string userName, string password)
