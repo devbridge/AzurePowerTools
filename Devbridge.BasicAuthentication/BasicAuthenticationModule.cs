@@ -29,13 +29,13 @@ namespace Devbridge.BasicAuthentication
     {
         /// <summary>
         /// HTTP1.1 Authorization header
-        /// </summary> 
+        /// </summary>
         public const string HttpAuthorizationHeader = "Authorization";
 
         /// <summary>
         /// HTTP1.1 Basic Challenge Scheme Name
         /// </summary>
-        public const string HttpBasicSchemeName = "Basic"; // 
+        public const string HttpBasicSchemeName = "Basic"; //
 
         /// <summary>
         /// HTTP1.1 Credential username and password separator
@@ -93,7 +93,7 @@ namespace Devbridge.BasicAuthentication
         /// </summary>
         private static IDictionary<string, bool> shouldChallengeCache = new Dictionary<string, bool>();
 
-        public void AuthenticateUser(Object source, EventArgs e)
+        public void AuthenticateUser(object source, EventArgs e)
         {
             var context = ((HttpApplication)source).Context;
 
@@ -122,7 +122,7 @@ namespace Devbridge.BasicAuthentication
             }
         }
 
-        public void IssueAuthenticationChallenge(Object source, EventArgs e)
+        public void IssueAuthenticationChallenge(object source, EventArgs e)
         {
             var context = ((HttpApplication)source).Context;
 
@@ -136,7 +136,7 @@ namespace Devbridge.BasicAuthentication
                 return;
             }
 
-            if (ShouldChallenge(context)) 
+            if (ShouldChallenge(context))
             {
                 // if authentication cookie is not set issue a basic challenge
                 var authCookie = context.Request.Cookies.Get(AuthenticationCookieName);
@@ -296,7 +296,7 @@ namespace Devbridge.BasicAuthentication
                 excludesAsString[excludeUrl] = excludeVerb;
             }
 
-            foreach(var url in excludesAsString.Keys)
+            foreach (var url in excludesAsString.Keys)
             {
                 var urlRegex = url == allowAnyRegex ? AllowAnyRegex : new Regex(url, RegexOptions.Compiled | RegexOptions.IgnoreCase);
                 var verbRegex = excludesAsString[url] == allowAnyRegex ? AllowAnyRegex : new Regex(excludesAsString[url], RegexOptions.Compiled | RegexOptions.IgnoreCase);
