@@ -63,6 +63,11 @@ namespace Devbridge.BasicAuthentication
         public const string Realm = "demo";
 
         /// <summary>
+        /// The App Setting that can enable/disable the entire functionality
+        /// </summary>
+        public const string EnabledAppSetting = "BasicAuthEnabled";
+
+        /// <summary>
         /// The credentials that are allowed to access the site.
         /// </summary>
         private IDictionary<string, string> activeUsers;
@@ -86,6 +91,11 @@ namespace Devbridge.BasicAuthentication
         /// Regular expression that matches any given string.
         /// </summary>
         private readonly static Regex AllowAnyRegex = new Regex(".*", RegexOptions.Compiled);
+
+        /// <summary>
+        /// Boolean that allows an app setting to enable/disable basic auth
+        /// </summary>
+        private bool isEnabled = true;
 
         /// <summary>
         /// Dictionary that caches whether basic authentication challenge should be sent. Key is request URL + request method, value indicates whether
@@ -158,6 +168,12 @@ namespace Devbridge.BasicAuthentication
         /// </summary>
         private bool ShouldChallenge(HttpContext context)
         {
+            // allow app setting take precedence
+            if (!isEnabled)
+            {
+                return false;
+            }
+
             // first check cache
             var key = string.Concat(context.Request.Path, context.Request.HttpMethod);
             if (shouldChallengeCache.ContainsKey(key))
@@ -251,6 +267,12 @@ namespace Devbridge.BasicAuthentication
 
             allowRedirects = basicAuth.AllowRedirects;
             allowLocal = basicAuth.AllowLocal;
+
+            var appSetting = ConfigurationManager.AppSettings[EnabledAppSetting];
+            if (appSetting != null)
+            {
+                isEnabled = appSetting == "true";
+            }
 
             InitCredentials(basicAuth);
             InitExcludes(basicAuth);
