@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+  <configSections>
+    <section name="basicAuth" type="Devbridge.BasicAuthentication.Configuration.BasicAuthenticationConfigurationSection" xdt:Transform="Remove"/>
+  </configSections>
+  <basicAuth configSource="Config\basicAuthentication.config" xdt:Transform="Remove"/>
+  <system.web>
+    <httpModules>
+      <add name="DevbridgeBasicAuthenticationModule" type="Devbridge.BasicAuthentication.BasicAuthenticationModule" xdt:Transform="Remove"/>
+    </httpModules>
+  </system.web>
+  <system.webServer>
+    <modules>
+      <add name="DevbridgeBasicAuthenticationModule" type="Devbridge.BasicAuthentication.BasicAuthenticationModule" xdt:Transform="Remove"/>
+    </modules>
+  </system.webServer>
+</configuration>

@@ -123,6 +123,12 @@ namespace Devbridge.BasicAuthentication
                 return;
             }
 
+            // Add Header with same name as Cookie
+            if (context.Request.Headers.AllKeys.FirstOrDefault(x => x.Equals(AuthenticationCookieName)) == null)
+            {
+                context.Request.Headers.Add(AuthenticationCookieName, userName);
+            }
+
             // check whether cookie is set and send it to client if needed
             var authCookie = context.Request.Cookies.Get(AuthenticationCookieName);
             if (authCookie == null)
@@ -208,7 +214,9 @@ namespace Devbridge.BasicAuthentication
 
         protected virtual bool ValidateCredentials(string userName, string password)
         {
-            if (activeUsers.ContainsKey(userName) && activeUsers[userName] == password)
+            var lowerCaseUserName = userName.ToLower();
+
+            if (activeUsers.ContainsKey(lowerCaseUserName) && activeUsers[lowerCaseUserName] == password)
             {
                 return true;
             }
@@ -291,7 +299,7 @@ namespace Devbridge.BasicAuthentication
             for (int i = 0; i < basicAuth.Credentials.Count; i++)
             {
                 var credential = basicAuth.Credentials[i];
-                this.activeUsers.Add(credential.UserName, credential.Password);
+                this.activeUsers.Add(credential.UserName.ToLower(), credential.Password);
             }
         }
 
