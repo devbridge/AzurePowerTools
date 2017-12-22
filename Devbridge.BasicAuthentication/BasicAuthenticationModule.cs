@@ -29,13 +29,13 @@ namespace Devbridge.BasicAuthentication
     {
         /// <summary>
         /// HTTP1.1 Authorization header
-        /// </summary> 
+        /// </summary>
         public const string HttpAuthorizationHeader = "Authorization";
 
         /// <summary>
         /// HTTP1.1 Basic Challenge Scheme Name
         /// </summary>
-        public const string HttpBasicSchemeName = "Basic"; // 
+        public const string HttpBasicSchemeName = "Basic"; //
 
         /// <summary>
         /// HTTP1.1 Credential username and password separator
@@ -103,7 +103,7 @@ namespace Devbridge.BasicAuthentication
         /// </summary>
         private static IDictionary<string, bool> shouldChallengeCache = new Dictionary<string, bool>();
 
-        public void AuthenticateUser(Object source, EventArgs e)
+        public void AuthenticateUser(object source, EventArgs e)
         {
             var context = ((HttpApplication)source).Context;
 
@@ -112,13 +112,13 @@ namespace Devbridge.BasicAuthentication
             // Extract the basic authentication credentials from the request
             string userName = null;
             string password = null;
-            if (!this.ExtractBasicCredentials(authorizationHeader, ref userName, ref password))
+            if (!ExtractBasicCredentials(authorizationHeader, ref userName, ref password))
             {
                 return;
             }
 
             // Validate the user credentials
-            if (!this.ValidateCredentials(userName, password))
+            if (!ValidateCredentials(userName, password))
             {
                 return;
             }
@@ -138,7 +138,7 @@ namespace Devbridge.BasicAuthentication
             }
         }
 
-        public void IssueAuthenticationChallenge(Object source, EventArgs e)
+        public void IssueAuthenticationChallenge(object source, EventArgs e)
         {
             var context = ((HttpApplication)source).Context;
 
@@ -188,7 +188,7 @@ namespace Devbridge.BasicAuthentication
             }
 
             // if value is not found in cache check exclude rules
-            foreach (var urlVerbRegex in this.excludes)
+            foreach (var urlVerbRegex in excludes)
             {
                 if ((urlVerbRegex.Key.IsMatch(context.Request.Path) || urlVerbRegex.Key.IsMatch(context.Request.Url.Host)) && urlVerbRegex.Value.IsMatch(context.Request.HttpMethod))
                 {
@@ -204,12 +204,9 @@ namespace Devbridge.BasicAuthentication
 
         private static bool IsRedirect(int httpStatusCode)
         {
-            return new[]
-            {
-                HttpStatusCode.MovedPermanently,
-                HttpStatusCode.Redirect,
-                HttpStatusCode.TemporaryRedirect
-            }.Any(c => (int)c == httpStatusCode);
+            return httpStatusCode == (int)HttpStatusCode.MovedPermanently ||
+                   httpStatusCode == (int)HttpStatusCode.Redirect ||
+                   httpStatusCode == (int)HttpStatusCode.TemporaryRedirect;
         }
 
         protected virtual bool ValidateCredentials(string userName, string password)
@@ -294,19 +291,19 @@ namespace Devbridge.BasicAuthentication
 
         private void InitCredentials(Configuration.BasicAuthenticationConfigurationSection basicAuth)
         {
-            this.activeUsers = new Dictionary<string, string>();
+            activeUsers = new Dictionary<string, string>();
 
             for (int i = 0; i < basicAuth.Credentials.Count; i++)
             {
                 var credential = basicAuth.Credentials[i];
-                this.activeUsers.Add(credential.UserName.ToLower(), credential.Password);
+                activeUsers.Add(credential.UserName.ToLower(), credential.Password);
             }
         }
 
         private void InitExcludes(Configuration.BasicAuthenticationConfigurationSection basicAuth)
         {
             var excludesAsString = new Dictionary<string, string>();
-            this.excludes = new Dictionary<Regex, Regex>();
+            excludes = new Dictionary<Regex, Regex>();
             var allowAnyRegex = AllowAnyRegex.ToString();
 
             for (int i = 0; i < basicAuth.Excludes.Count; i++)
@@ -345,7 +342,7 @@ namespace Devbridge.BasicAuthentication
 
             foreach (ConfigurationSectionGroup g in group.SectionGroups)
             {
-                var section = this.TraverseConfigSections<T>(g);
+                var section = TraverseConfigSections<T>(g);
                 if (section != null)
                 {
                     return section;
