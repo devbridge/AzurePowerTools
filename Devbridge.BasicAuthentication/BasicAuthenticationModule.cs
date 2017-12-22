@@ -152,7 +152,7 @@ namespace Devbridge.BasicAuthentication
                 return;
             }
 
-            if (ShouldChallenge(context)) 
+            if (ShouldChallenge(context))
             {
                 // if authentication cookie is not set issue a basic challenge
                 var authCookie = context.Request.Cookies.Get(AuthenticationCookieName);
@@ -190,7 +190,7 @@ namespace Devbridge.BasicAuthentication
             // if value is not found in cache check exclude rules
             foreach (var urlVerbRegex in this.excludes)
             {
-                if (urlVerbRegex.Key.IsMatch(context.Request.Path) && urlVerbRegex.Value.IsMatch(context.Request.HttpMethod))
+                if ((urlVerbRegex.Key.IsMatch(context.Request.Path) || urlVerbRegex.Key.IsMatch(context.Request.Url.Host)) && urlVerbRegex.Value.IsMatch(context.Request.HttpMethod))
                 {
                     shouldChallengeCache[key] = false;
 
@@ -326,7 +326,7 @@ namespace Devbridge.BasicAuthentication
                 excludesAsString[excludeUrl] = excludeVerb;
             }
 
-            foreach(var url in excludesAsString.Keys)
+            foreach (var url in excludesAsString.Keys)
             {
                 var urlRegex = url == allowAnyRegex ? AllowAnyRegex : new Regex(url, RegexOptions.Compiled | RegexOptions.IgnoreCase);
                 var verbRegex = excludesAsString[url] == allowAnyRegex ? AllowAnyRegex : new Regex(excludesAsString[url], RegexOptions.Compiled | RegexOptions.IgnoreCase);

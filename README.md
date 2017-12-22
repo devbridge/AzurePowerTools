@@ -25,4 +25,6 @@ Basic authentication module has relation to two projects:
 <add url="^/allow(.*)" verb="" />
 <!-- exclude all requests to URLs starting with /home; rules specified below overwrite previous rules with the same url pattern.  -->
 <add url="^/home(.*)" verb="" />
+<!-- exclude all requests to URLs on the production site; other requests should be authenticated -->
+<add url="^www.my-production-site.com" verb="" />
 ```
