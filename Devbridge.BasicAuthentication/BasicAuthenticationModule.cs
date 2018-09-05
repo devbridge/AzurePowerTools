@@ -105,7 +105,8 @@ namespace Devbridge.BasicAuthentication
 
         public void AuthenticateUser(object source, EventArgs e)
         {
-            var context = ((HttpApplication)source).Context;
+            var httpApp = (HttpApplication)source;
+            var context = httpApp.Context;
 
             string authorizationHeader = context.Request.Headers[HttpAuthorizationHeader];
 
@@ -114,12 +115,14 @@ namespace Devbridge.BasicAuthentication
             string password = null;
             if (!ExtractBasicCredentials(authorizationHeader, ref userName, ref password))
             {
+                httpApp.CompleteRequest();
                 return;
             }
 
             // Validate the user credentials
             if (!ValidateCredentials(userName, password))
             {
+                httpApp.CompleteRequest();
                 return;
             }
 
